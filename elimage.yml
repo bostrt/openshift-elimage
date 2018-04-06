@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: elimage
+  name: elimage
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    app: elimage
+    deploymentconfig: elimage
+  strategy:
+    type: Rolling
+  template:
+    metadata:
+      labels:
+        app: elimage
+        deploymentconfig: elimage
+    spec:
+      containers:
+      - image: bostrt/elimage@sha256:4f07866e4620faf34e4087c8830fed3e95bfb8c83524de5800a28b24d2ab56e5
+        imagePullPolicy: IfNotPresent
+        name: elimage
+        ports:
+        - containerPort: 8888
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /elimage/data
+          name: elimage-volume-1
+      volumes:
+      - emptyDir: {}
+        name: elimage-volume-1
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - elimage
+      from:
+        kind: ImageStreamTag
+        name: elimage:0.2
+        namespace: bostrt
+    type: ImageChange

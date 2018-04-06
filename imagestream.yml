@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ImageStream
+metadata:
+  labels:
+    app: elimage
+  name: elimage
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+  - annotations:
+    from:
+      kind: DockerImage
+      name: docker.io/bostrt/elimage:0.2
+    name: "0.2"
+    referencePolicy:
+      type: Source

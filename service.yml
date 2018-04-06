@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: elimage
+  name: elimage
+spec:
+  ports:
+  - name: 8888-tcp
+    port: 8888
+    protocol: TCP
+    targetPort: 8888
+  selector:
+    app: elimage
+    deploymentconfig: elimage
+  sessionAffinity: None
+  type: ClusterIP
